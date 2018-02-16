@@ -69,7 +69,7 @@ class ModuleResolver {
 		if (this.cacheFile) {
 			if (this.cache.fileCache[path.basename(modulePath)]) {
 				let stat = fs.statSync(modulePath);
-				let modificationTime = stat.mtimeMs || stat.mtime.value;
+				let modificationTime = stat.mtimeMs || stat.mtime * 1;
 				if (this.cache.fileCache[path.basename(modulePath)].mtimeMs < modificationTime) {
 					this.cache.fileCache[path.basename(modulePath)].mtimeMs = modificationTime;
 					this.fetchModule(modulePath);
@@ -77,7 +77,7 @@ class ModuleResolver {
 			} else {
 				let stat = fs.statSync(modulePath);
 				this.cache.fileCache[path.basename(modulePath)] = {
-					mtimeMs: stat.mtimeMs || stat.mtime.value
+					mtimeMs: stat.mtimeMs || stat.mtime * 1
 				};
 				this.fetchModule(modulePath);
 			}
