@@ -1,5 +1,10 @@
 # CDI
 
+[![Build Status](https://travis-ci.org/f3lang/cdi.svg?branch=master)](https://travis-ci.org/f3lang/cdi) 
+[![Coverage Status](https://coveralls.io/repos/github/f3lang/cdi/badge.svg?branch=master)](https://coveralls.io/github/f3lang/cdi?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/6b1a2292df6234fe0d1c/maintainability)](https://codeclimate.com/github/f3lang/cdi/maintainability)
+
+
 Cool Dependency Injection  
 A lightweight, powerful and very easy to use dependency injection framework.  
 Support singleton, prototype and custom scopes, configuration injection and handling of 
