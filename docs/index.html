@@ -64,7 +64,7 @@ module.exports.inject = ['config:bike:wheels.size'];</code></pre><p>src/bike.js:
 module.exports = Bike;
 module.exports.inject = ['Wheels'];</code></pre><p>main.js:</p>
 <pre class="prettyprint source lang-js"><code>const path = require('path');
-const ObjectManager = require('cdi').objectManager;
+const CDI = require('cdi');
 
 const bikeConfig = {
     wheels: {
@@ -72,7 +72,7 @@ const bikeConfig = {
     }
 };
 
-let objectManager = new ObjectManager({
+let cdi = new CDI({
     moduleSrc: [path.join(__dirname, 'src')],
     cacheFile: path.join(__dirname, 'cache', 'cdi.json'),
     configurations: {
@@ -80,7 +80,7 @@ let objectManager = new ObjectManager({
     }
 });
 
-let myBike = objectManager.getInstance('Bike');
+let myBike = cdi.getInstance('Bike');
 // now you got your bike with injected wheels, which got the size information injected</code></pre><p>ready for more?</p>
 <h2>more complex example with active usage of dependency trees</h2><p>src/speed.js:</p>
 <pre class="prettyprint source lang-js"><code>class Speed {
@@ -110,7 +110,7 @@ module.exports.inject = ['config:bike:wheels.size', 'Speed:root'];</code></pre><
 module.exports = Bike;
 module.exports.inject = ['Wheel:front', 'Wheel:back'];</code></pre><p>main.js:</p>
 <pre class="prettyprint source lang-js"><code>const path = require('path');
-const ObjectManager = require('cdi').objectManager;
+const CDI = require('cdi');
 
 const bikeConfig = {
     wheels: {
@@ -118,7 +118,7 @@ const bikeConfig = {
     }
 };
 
-let objectManager = new ObjectManager({
+let cdi = new CDI({
     moduleSrc: [path.join(__dirname, 'src')],
     cacheFile: path.join(__dirname, 'cache', 'cdi.json'),
     configurations: {
@@ -126,7 +126,7 @@ let objectManager = new ObjectManager({
     }
 });
 
-let myBike = objectManager.getInstance('Bike');
+let myBike = cdi.getInstance('Bike');
 // now you got your bike with two injected wheels, which got the size information injected 
 // and share one common speed instance</code></pre><h2>Documentation</h2><p>I don't want to just copy paste documentation. So best head over to <a href="https://f3lang.github.io/cdi">https://f3lang.github.io/cdi</a></p>
 <h2>Contribute</h2><p>You want to make the world a better place and want to start with this module? awesome :D<br>Please read the contribution guidelines to get started and i'm looking forward to new stuff.</p></article>

@@ -16,7 +16,7 @@ a very simple example how to build an instantiator.
 After you build your instantiator, you can register it in the objectmanager to make it available:
 ```js
 let instantiator = new CustomInstantiator();
-objectManager.registerInstantiator('customKeyword', instantiator);
+cdi.registerInstantiator('customKeyword', instantiator);
 ```
 And there we go, now you can create instances with you own instantiator and build whatever you want.
 Just set the scope of your modules, you want to instantiate with your custom instantiator, to your

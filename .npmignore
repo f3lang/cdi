@@ -1,0 +1,9 @@
+dev
+node_modules
+.nyc_output
+.[iI]dea
+coverage
+docmd
+docs
+test
+.travis.yml

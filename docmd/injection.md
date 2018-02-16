@@ -25,10 +25,10 @@ let configuration = {
 		}
 	}
 };
-objectManager.addConfiguration(configuration, "health");
+cdi.addConfiguration(configuration, "health");
 
 // or on initialization:
-let objectManager = new ObjectManager({
+let cdi = new CDI({
 	configurations: {
 		health: configuration 
 	}
@@ -65,7 +65,7 @@ module.exports.inject = ['Wheels'];
 main.js:
 ```js
 const path = require('path');
-const ObjectManager = require('cdi').objectManager;
+const CDI = require('cdi');
 
 const bikeConfig = {
     wheels: {
@@ -73,7 +73,7 @@ const bikeConfig = {
     }
 };
 
-let objectManager = new ObjectManager({
+let cdi = new CDI({
     moduleSrc: [path.join(__dirname, 'src')],
     cacheFile: path.join(__dirname, 'cache', 'cdi.json'),
     configurations: {
@@ -81,7 +81,7 @@ let objectManager = new ObjectManager({
     }
 });
 
-let myBike = objectManager.getInstance('Bike');
+let myBike = cdi.getInstance('Bike');
 // now you got your bike with injected wheels, which got the size information injected
 ```
 
