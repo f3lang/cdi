@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "coverage": "istanbul cover _mocha",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
     "jsdoc": "./node_modules/.bin/jsdoc -c jsdoc-conf.json -r "
   },
   "repository": {
@@ -35,10 +35,12 @@
   "homepage": "https://github.com/f3lang/cdi#readme",
   "devDependencies": {
     "chai": "^4.1.2",
+    "coveralls": "^3.0.0",
     "eslint": "^4.17.0",
     "istanbul": "^0.4.5",
     "jsdoc": "^3.5.5",
-    "mocha": "^5.0.0"
+    "mocha": "^5.0.0",
+    "nyc": "^11.4.1"
   },
   "dependencies": {
     "uuid": "^3.2.1"
