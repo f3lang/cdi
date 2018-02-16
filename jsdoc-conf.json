@@ -1,8 +1,8 @@
 {
   "opts": {
     "readme": "./README.md",
-    "destination": "./jsdocs",
-    "tutorials": "./doc"
+    "destination": "./doc",
+    "tutorials": "./docmd"
   },
   "tags": {
     "allowUnknownTags": true,
