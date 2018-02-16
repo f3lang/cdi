@@ -9,6 +9,23 @@ Cool Dependency Injection
 A lightweight, powerful and very easy to use dependency injection framework.  
 Support singleton, prototype and custom scopes, configuration injection and handling of 
 multiple instances of modules. 
+## Usage
+```bash
+npm install --save cdi
+```
+and code:
+```js
+let path = require('path');
+let CDI = require('cdi');
+let cdi = new cdi({
+    moduleSrc: [path.join(__dirname, 'src')]
+});
+let myMainModule = cdi.getInstance('MainModule');
+myMainModule.nowDoMyStuff();
+
+// as i promised, simple as hell :D
+```
+
 ## simple example with module and configuration injection
 src/wheels.js:
 ```js
