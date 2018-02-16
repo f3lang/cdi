@@ -1,7 +1,7 @@
 {
   "opts": {
     "readme": "./README.md",
-    "destination": "./doc",
+    "destination": "./docs",
     "tutorials": "./docmd"
   },
   "tags": {
@@ -14,7 +14,10 @@
   "plugins": ["plugins/markdown"],
   "templates": {
     "cleverlinks": false,
-    "monospaceLinks": false
+    "monospaceLinks": false,
+    "default": {
+      "includeDate": false
+    }
   },
   "recurseDepth": 10
 }
