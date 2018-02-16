@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: ModuleResolver.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: ModuleResolver.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const path = require('path');
+const fs = require('fs');
+
+/**
+ * The module resolver will resolve modules and converts their inject information into
+ * a set of information, the objectManager needs in order to handle injection properly
+ *
+ * @author Wolfgang Felbermeier (@f3lang)
+ */
+class ModuleResolver {
+
+	/**
+	 * @param moduleSrc An array with absolute paths to folders including
+	 * modules to use for injection
+	 * @param cacheFile A path to a json file, that should be used as a cache.
+	 * @param moduleAnalyzer
+	 */
+	constructor(moduleSrc, cacheFile, moduleAnalyzer) {
+		this.cache = {
+			moduleMap: {},
+			fileCache: {}
+		};
+		if (cacheFile) {
+			this.cacheFile = cacheFile;
+			if (fs.existsSync(cacheFile)) {
+				this.cache = require(cacheFile);
+			}
+		}
+		this.moduleAnalyzer = moduleAnalyzer;
+		this.nameCollisionMap = [];
+
+		let modulePathList = [];
+		let i = moduleSrc.length;
+		while (i--) {
+			this.addModuleSrcDir(moduleSrc[i]);
+		}
+		if (cacheFile) {
+			this.writeCache();
+		}
+	}
+
+	/**
+	 * Add an additional source directory to the Module Resolver
+	 * @param {string} dir The directory to parse
+	 */
+	addModuleSrcDir(dir) {
+		let modulePaths = fs.readdirSync(dir);
+		modulePaths.forEach(src => {
+			let stat = fs.statSync(path.join(dir, src));
+			if (stat.isDirectory()) {
+				this.addModuleSrcDir(path.join(dir, src));
+			} else {
+				if (path.extname(src).toLowerCase() === '.js') {
+					this.processModule(path.join(dir, src), stat);
+				}
+			}
+		});
+		if (this.cacheFile) {
+			this.writeCache();
+		}
+	}
+
+	/**
+	 * Fetches the module and handles caching.
+	 * @param modulePath The absolute path to the module source file
+	 * @param stat The stat of the module file
+	 */
+	processModule(modulePath, stat) {
+		if (this.cacheFile) {
+			if (this.cache.fileCache[path.basename(modulePath)]) {
+				let stat = fs.statSync(modulePath);
+				if (this.cache.fileCache[path.basename(modulePath)].mtimeMs &lt; stat.mtimeMs) {
+					this.cache.fileCache[path.basename(modulePath)].mtimeMs = stat.mtimeMs;
+					this.fetchModule(modulePath);
+				}
+			} else {
+				let stat = fs.statSync(modulePath);
+				this.cache.fileCache[path.basename(modulePath)] = {
+					mtimeMs: stat.mtimeMs
+				};
+				this.fetchModule(modulePath);
+			}
+		} else {
+			this.fetchModule(modulePath);
+		}
+	}
+
+	/**
+	 * Fetches the module information and puts them into the cache.
+	 * @param modulePath The path to the module. Has to be resolvable by require()
+	 * @return {Promise&lt;any>}
+	 */
+	fetchModule(modulePath) {
+		let module = require(modulePath);
+		let moduleConfig = this.moduleAnalyzer.analyze(module);
+		let moduleNames = module.alias || [];
+		moduleNames.push(module.name);
+		let i = moduleNames.length;
+		while (i--) {
+			if (this.nameCollisionMap.indexOf(moduleNames[i]) > -1) {
+				throw new Error("module name " + moduleNames[i] + " is already in use");
+			}
+		}
+		moduleNames.forEach(name => {
+			this.nameCollisionMap.push(name);
+			this.cache.moduleMap[name] = {
+				path: modulePath,
+				config: moduleConfig,
+				name: name,
+				originModuleName: module.name
+			}
+		});
+	}
+
+	/**
+	 * Get the complete set of resolved modules
+	 * @return {{moduleMap: {}, fileCache: {}}|*}
+	 */
+	getResolvedModules() {
+		return this.cache;
+	}
+
+	/**
+	 * Write the cache file.
+	 */
+	writeCache() {
+		fs.writeFileSync(this.cacheFile, JSON.stringify(this.cache, null, '\t'));
+	}
+
+}
+
+module.exports = ModuleResolver;
+module.exports.inject = ['config:cdi:moduleSrc', 'config:cdi:resolver.cacheFile', 'ModuleAnalyzer'];</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AbstractInstantiator.html">AbstractInstantiator</a></li><li><a href="ConfigResolver.html">ConfigResolver</a></li><li><a href="DependencyTree.html">DependencyTree</a></li><li><a href="ModuleAnalyzer.html">ModuleAnalyzer</a></li><li><a href="ModuleResolver.html">ModuleResolver</a></li><li><a href="ObjectManager.html">ObjectManager</a></li><li><a href="Prototype.html">Prototype</a></li><li><a href="Singleton.html">Singleton</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-cache.html">cache</a></li><li><a href="tutorial-dependency_trees.html">dependency_trees</a></li><li><a href="tutorial-injection.html">injection</a></li><li><a href="tutorial-instantiator.html">instantiator</a></li><li><a href="tutorial-module_structure.html">module_structure</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Feb 16 2018 17:39:25 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

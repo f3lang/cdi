@@ -1,0 +1,50 @@
+{
+  "name": "cdi",
+  "version": "0.0.1",
+  "description": "The Cool Dependency Injection. An easy to use powerful intuitive dependency injection manager",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "coverage": "istanbul cover _mocha",
+    "jsdoc": "./node_modules/.bin/jsdoc -c jsdoc-conf.json -r "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/f3lang/cdi.git"
+  },
+  "keywords": [
+    "dependency",
+    "injection",
+    "js",
+    "easy",
+    "intuitive",
+    "ioc",
+    "inversion",
+    "of",
+    "control"
+  ],
+  "author": {
+    "name": "Wolfgang Felbermeier",
+    "email": "wf@felbermeier.com",
+    "url": "https://github.com/f3lang"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/f3lang/cdi/issues"
+  },
+  "homepage": "https://github.com/f3lang/cdi#readme",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "eslint": "^4.17.0",
+    "istanbul": "^0.4.5",
+    "jsdoc": "^3.5.5",
+    "mocha": "^5.0.0"
+  },
+  "dependencies": {
+    "uuid": "^3.2.1"
+  },
+  "directories": {
+    "doc": "./doc",
+    "lib": "./src"
+  }
+}

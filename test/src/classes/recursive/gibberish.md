@@ -1,0 +1,1 @@
+Just a file which contains gibberish to confuse cdi. If it can't be confused, it is good ;)
