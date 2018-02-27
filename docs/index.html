@@ -48,7 +48,16 @@
 <a href="https://codeclimate.com/github/f3lang/cdi/maintainability"><img src="https://api.codeclimate.com/v1/badges/6b1a2292df6234fe0d1c/maintainability" alt="Maintainability"></a></p>
 <p>Cool Dependency Injection<br>A lightweight, powerful and very easy to use dependency injection framework.<br>Support singleton, prototype and custom scopes, configuration injection and handling of 
 multiple instances of modules. </p>
-<h2>simple example with module and configuration injection</h2><p>src/wheels.js:</p>
+<h2>Usage</h2><pre class="prettyprint source lang-bash"><code>npm install --save cdi</code></pre><p>and code:</p>
+<pre class="prettyprint source lang-js"><code>let path = require('path');
+let CDI = require('cdi');
+let cdi = new cdi({
+    moduleSrc: [path.join(__dirname, 'src')]
+});
+let myMainModule = cdi.getInstance('MainModule');
+myMainModule.nowDoMyStuff();
+
+// as i promised, simple as hell :D</code></pre><h2>simple example with module and configuration injection</h2><p>src/wheels.js:</p>
 <pre class="prettyprint source lang-js"><code>class Wheels {
     constructor(size) {
         this.size = size;
@@ -140,7 +149,7 @@ let myBike = cdi.getInstance('Bike');
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AbstractInstantiator.html">AbstractInstantiator</a></li><li><a href="ConfigResolver.html">ConfigResolver</a></li><li><a href="DependencyTree.html">DependencyTree</a></li><li><a href="ModuleAnalyzer.html">ModuleAnalyzer</a></li><li><a href="ModuleResolver.html">ModuleResolver</a></li><li><a href="ObjectManager.html">ObjectManager</a></li><li><a href="Prototype.html">Prototype</a></li><li><a href="Singleton.html">Singleton</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-cache.html">cache</a></li><li><a href="tutorial-dependency_trees.html">dependency_trees</a></li><li><a href="tutorial-injection.html">injection</a></li><li><a href="tutorial-instantiator.html">instantiator</a></li><li><a href="tutorial-module_structure.html">module_structure</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AbstractInstantiator.html">AbstractInstantiator</a></li><li><a href="ConfigResolver.html">ConfigResolver</a></li><li><a href="DependencyTree.html">DependencyTree</a></li><li><a href="ModuleAnalyzer.html">ModuleAnalyzer</a></li><li><a href="ModuleResolver.html">ModuleResolver</a></li><li><a href="ObjectManager.html">ObjectManager</a></li><li><a href="Prototype.html">Prototype</a></li><li><a href="Singleton.html">Singleton</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-cache.html">cache</a></li><li><a href="tutorial-dependency_trees.html">dependency_trees</a></li><li><a href="tutorial-global_scope.html">global_scope</a></li><li><a href="tutorial-injection.html">injection</a></li><li><a href="tutorial-instantiator.html">instantiator</a></li><li><a href="tutorial-module_structure.html">module_structure</a></li></ul>
 </nav>
 
 <br class="clear">
