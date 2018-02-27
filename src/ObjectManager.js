@@ -28,20 +28,35 @@ class ObjectManager {
 	 * @param {Array} options.moduleSrc An array with paths to the module source files to autowire
 	 * @param {String=} options.cacheFile A file to use as a cache for the module meta data
 	 * @param {Object=} options.configurations A set of configurations to use
+	 * @param {boolean=} [options.globalScope=false] When set to true, will register the current instance
+	 * in the global scope and return it, when requested again. Use this only when necessary and you need to
+	 * use the object manager in different locations that cannot be resolved in one scope by the ObjectManager
 	 */
 	constructor(options) {
+		let defaultOptions = {
+			moduleSrc: [],
+			cacheFile: null,
+			configurations: {},
+			globalScope: false
+		};
+		this.options = Object.assign(defaultOptions, options || {});
+		if (this.options.globalScope) {
+			if (global._cid) {
+				return global._cid;
+			} else {
+				global._cid = this;
+			}
+		}
 		this.trees = {};
 		this.configurations = {};
 		this.instantiators = {};
 		this.moduleAnalyzer = new ModuleAnalyzer(this);
 		this.configResolver = new ConfigResolver();
-		this.addConfiguration({moduleSrc: options.moduleSrc, cacheFile: options.cacheFile}, 'cdi');
-		if(options.configurations) {
-			Object.keys(options.configurations).forEach(key => {
-				this.addConfiguration(options.configurations[key], key);
-			});
-		}
-		this.moduleResolver = new ModuleResolver(options.moduleSrc, options.cacheFile, this.moduleAnalyzer);
+		this.addConfiguration({moduleSrc: this.options.moduleSrc, cacheFile: this.options.cacheFile}, 'cdi');
+		Object.keys(this.options.configurations).forEach(key => {
+			this.addConfiguration(options.configurations[key], key);
+		});
+		this.moduleResolver = new ModuleResolver(this.options.moduleSrc, this.options.cacheFile, this.moduleAnalyzer);
 		this.registerInstantiator('singleton', new Singleton(this));
 		this.registerInstantiator('prototype', new Prototype(this));
 		this.addDependencyTree('root');
@@ -73,12 +88,12 @@ class ObjectManager {
 
 	/**
 	 * Requests an instance of a module. All dependencies will be injected also into submodules.
-	 * @param moduleName The name of the module. Must match the Module name or one of its alias
-	 * @param treeIdentifier The tree to use. Default is "root"
-	 * @param _requestId Internal parameter to detect circular dependencies
+	 * @param {string} moduleName The name of the module. Must match the Module name or one of its alias
+	 * @param {string=} treeIdentifier The tree to use. Default is "root"
+	 * @param {string=} _requestId Internal parameter to detect circular dependencies
 	 * @return {*}
 	 */
-	requestInstanceOfModule(moduleName, treeIdentifier = 'root', _requestId=uuid()) {
+	requestInstanceOfModule(moduleName, treeIdentifier = 'root', _requestId = uuid()) {
 		switch (moduleName) {
 			case 'ObjectManager':
 				return this;
@@ -178,7 +193,7 @@ class ObjectManager {
 	 * @param {string} root The name of the tree
 	 */
 	addDependencyTree(root) {
-		if(this.trees[root]) {
+		if (this.trees[root]) {
 			throw new Error('Tree with root "' + root + '" already exists');
 		}
 		this.trees[root] = new DependencyTree(this, this.moduleResolver, root);

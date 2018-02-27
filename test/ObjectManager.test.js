@@ -21,6 +21,10 @@ describe("Object Manager", function () {
 		});
 	});
 
+	it("will initialize with default options", function () {
+		let objectManager = new ObjectManager();
+	});
+
 	it("will instantiate an object", function () {
 		let objectManager = new ObjectManager({
 			moduleSrc: [classPath]
@@ -64,7 +68,7 @@ describe("Object Manager", function () {
 		expect(() => objectManager.addDependencyTree("banana")).to.throw();
 	});
 
-	it("abstract instantiator will fail", function() {
+	it("abstract instantiator will fail", function () {
 		let abstractInstantiator = new AbstractInstantiator();
 		expect(() => abstractInstantiator.getInstance()).to.throw();
 	});
@@ -156,6 +160,36 @@ describe("Object Manager", function () {
 
 	});
 
+	describe("Global Scope", function () {
+
+		it("will use an existing instance in the global scope with enabled global scope", function () {
+			let objectManager = new ObjectManager({
+				moduleSrc: [classPath],
+				globalScope: true
+			});
+			let bike = objectManager.getInstance("Bike");
+			let objectManager2 = new ObjectManager({
+				moduleSrc: [classPath],
+				globalScope: true
+			});
+			let bike2 = objectManager2.getInstance("Bike");
+			expect(bike).to.eql(bike2);
+		});
+
+		it("will not use the global scope, if not enabled", function () {
+			let objectManager = new ObjectManager({
+				moduleSrc: [classPath]
+			});
+			let bike = objectManager.getInstance("Bike");
+			let objectManager2 = new ObjectManager({
+				moduleSrc: [classPath]
+			});
+			let bike2 = objectManager2.getInstance("Bike");
+			expect(bike.uuid).not.to.eql(bike2.uuid);
+		});
+
+	});
+
 	it("will return internal module instances", function () {
 		let objectManager = new ObjectManager({
 			moduleSrc: [classPath]
@@ -172,6 +206,6 @@ describe("Object Manager", function () {
 			moduleSrc: [classPath]
 		});
 		expect(objectManager.getInstance("DependencyTree", "banana")).to.eql(objectManager.trees.banana);
-	})
+	});
 
 });
