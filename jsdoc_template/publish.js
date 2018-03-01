@@ -1,5 +1,6 @@
 'use strict';
 
+//TODO: build proper custom template
 var doop = require('jsdoc/util/doop');
 var env = require('jsdoc/env');
 var fs = require('jsdoc/fs');
@@ -326,10 +327,37 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
                 } else {
                     displayName = item.name;
                 }
-                itemsNav += '<li>' + linktoFn(item.longname, displayName.replace(/\b(module|event):/g, '')) + '</li>';
+                if(item.children) {
+					itemsNav += '<li>' + item.title + '</li>';
+                } else {
+					itemsNav += '<li>' + linktoFn(item.longname, displayName.replace(/\b(module|event):/g, '')) + '</li>';
+                }
 
                 itemsSeen[item.longname] = true;
             }
+
+			if(item.children){
+				let childItems = '<li><ul class="child-nav">' + item.children.reduce((acc, item) => {
+					var displayName;
+
+					if ( !hasOwnProp.call(item, 'longname') ) {
+						acc += '<li>' + linktoFn('', item.name) + '</li>';
+					}
+					else if ( !hasOwnProp.call(itemsSeen, item.longname) ) {
+						if (env.conf.templates.default.useLongnameInNav) {
+							displayName = item.longname;
+						} else {
+							displayName = item.name;
+						}
+						acc += '<li>' + linktoFn(item.longname, displayName.replace(/\b(module|event):/g, '')) + '</li>';
+
+						itemsSeen[item.longname] = true;
+					}
+					return acc;
+				}, '') + '</ul></li>';
+				itemsNav += childItems;
+			}
+
         });
 
         if (itemsNav !== '') {
@@ -370,11 +398,13 @@ function buildNav(members) {
 
     nav += buildMemberNav(members.modules, 'Modules', {}, linkto);
     nav += buildMemberNav(members.externals, 'Externals', seen, linktoExternal);
+    // nasty....
+	members.tutorials = members.tutorials.sort((t1, t2) => parseInt(t1.content) - parseInt(t2.content));
+	nav += buildMemberNav(members.tutorials, 'Documentation', seenTutorials, linktoTutorial);
     nav += buildMemberNav(members.classes, 'Classes', seen, linkto);
     nav += buildMemberNav(members.events, 'Events', seen, linkto);
     nav += buildMemberNav(members.namespaces, 'Namespaces', seen, linkto);
     nav += buildMemberNav(members.mixins, 'Mixins', seen, linkto);
-    nav += buildMemberNav(members.tutorials, 'Documentation', seenTutorials, linktoTutorial);
     nav += buildMemberNav(members.interfaces, 'Interfaces', seen, linkto);
 
     if (members.globals.length) {
