@@ -1,4 +1,5 @@
+exclude_patterns:
 # exclude jsdoc template
-- "jsdoc_template"
+- "jsdoc_template/"
 # exclude generated docs
-- "docs"
+- "docs/"
