@@ -29,7 +29,7 @@ function tutoriallink(tutorial) {
     return helper.toTutorial(tutorial, null, {
         tag: 'em',
         classname: 'disabled',
-        prefix: 'Tutorial: '
+        prefix: 'Documentation: '
     });
 }
 
@@ -722,7 +722,7 @@ exports.publish = function(taffyData, opts, tutorials) {
     // tutorials can have only one parent so there is no risk for loops
     function saveChildren(node) {
         node.children.forEach(function(child) {
-            generateTutorial('Tutorial: ' + child.title, child, helper.tutorialToUrl(child.name));
+            generateTutorial('Documentation: ' + child.title, child, helper.tutorialToUrl(child.name));
             saveChildren(child);
         });
     }
