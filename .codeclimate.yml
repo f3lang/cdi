@@ -3,3 +3,4 @@ exclude_patterns:
 - "jsdoc_template/"
 # exclude generated docs
 - "docs/"
+- "test/"
