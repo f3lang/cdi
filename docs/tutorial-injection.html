@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Tutorial: injection</title>
+    <title>CDI: Documentation: Injection</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,14 +17,14 @@
 
 <div id="main">
 
-    <h1 class="page-title">Tutorial: injection</h1>
+    <h1 class="page-title">Documentation: Injection</h1>
 
     <section>
 
 <header>
     
 
-    <h2>injection</h2>
+    <h2>Injection</h2>
 </header>
 
 <article>
@@ -33,8 +33,8 @@ the definition of the properties, that should be used to instantiate your module
 to inject should match the number of parameters in the constructor of your module. If you define less then
 the number of parameters, the overflowing parameters will be null.<br>You can define two different types of injections:</p>
 <h4>module dependency</h4><p>A module dependency has the form <code>moduleName:treeName</code> whereas moduleName may be either the name of
-your module or an alias of your module as defined in <a href="tutorial-module_structure.html">module_structure</a> and treeName the name
-if the <a href="tutorial-dependency_trees.html">dependency_trees</a>. You can omit the treeName and should to this in most cases, since
+your module or an alias of your module as defined in <a href="tutorial-module_structure.html">Module Structure</a> and treeName the name
+if the <a href="tutorial-dependency_trees.html">Dependency Trees</a>. You can omit the treeName and should to this in most cases, since
 you need to override only in very complex environments. When you set the treeName, you will always get
 an instance out of this tree no matter in which tree the instance of your module resides. If not set,
 you will get an instance of the injected module which resides in the same dependency tree as your 
@@ -102,7 +102,7 @@ let myBike = cdi.getInstance('Bike');
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AbstractInstantiator.html">AbstractInstantiator</a></li><li><a href="ConfigResolver.html">ConfigResolver</a></li><li><a href="DependencyTree.html">DependencyTree</a></li><li><a href="ModuleAnalyzer.html">ModuleAnalyzer</a></li><li><a href="ModuleResolver.html">ModuleResolver</a></li><li><a href="ObjectManager.html">ObjectManager</a></li><li><a href="Prototype.html">Prototype</a></li><li><a href="Singleton.html">Singleton</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-cache.html">cache</a></li><li><a href="tutorial-dependency_trees.html">dependency_trees</a></li><li><a href="tutorial-global_scope.html">global_scope</a></li><li><a href="tutorial-injection.html">injection</a></li><li><a href="tutorial-instantiator.html">instantiator</a></li><li><a href="tutorial-module_structure.html">module_structure</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Documentation</h3><ul><li>General</li><li><ul class="child-nav"><li><a href="tutorial-options.html">Options</a></li><li><a href="tutorial-injection.html">Injection</a></li><li><a href="tutorial-instantiator.html">Instantiator</a></li><li><a href="tutorial-module_structure.html">Module Structure</a></li></ul></li><li>Deep Dive</li><li><ul class="child-nav"><li><a href="tutorial-cache.html">Caching</a></li><li><a href="tutorial-dependency_trees.html">Dependency Trees</a></li><li><a href="tutorial-global_scope.html">Global Scope</a></li></ul></li></ul><h3>Classes</h3><ul><li><a href="AbstractInstantiator.html">AbstractInstantiator</a></li><li><a href="ConfigResolver.html">ConfigResolver</a></li><li><a href="DependencyTree.html">DependencyTree</a></li><li><a href="ModuleAnalyzer.html">ModuleAnalyzer</a></li><li><a href="ModuleResolver.html">ModuleResolver</a></li><li><a href="ObjectManager.html">ObjectManager</a></li><li><a href="Prototype.html">Prototype</a></li><li><a href="Singleton.html">Singleton</a></li></ul>
 </nav>
 
 <br class="clear">

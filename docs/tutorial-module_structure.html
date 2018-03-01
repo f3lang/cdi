@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Tutorial: module_structure</title>
+    <title>CDI: Documentation: Module Structure</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,14 +17,14 @@
 
 <div id="main">
 
-    <h1 class="page-title">Tutorial: module_structure</h1>
+    <h1 class="page-title">Documentation: Module Structure</h1>
 
     <section>
 
 <header>
     
 
-    <h2>module_structure</h2>
+    <h2>Module Structure</h2>
 </header>
 
 <article>
@@ -43,13 +43,13 @@ for your module, that will be analyzed by cdi:</p>
 module.exports = Bananarama;
 module.exports.inject = ['Apple', 'config:fruit:prod.bananaconf'];
 module.exports.scope = 'singleton';
-module.exports.alias = ['MyCoolModule', 'AnotherCoolName']</code></pre><p>The <em>inject</em> property tells cdi what to inject. For further information how to define injects look at <a href="tutorial-injection.html">injection</a><br>The <em>scope</em> tells cdi how to handle instances of your module. Right now you have two options available:  </p>
+module.exports.alias = ['MyCoolModule', 'AnotherCoolName']</code></pre><p>The <em>inject</em> property tells cdi what to inject. For further information how to define injects look at <a href="tutorial-injection.html">Injection</a><br>The <em>scope</em> tells cdi how to handle instances of your module. Right now you have two options available:  </p>
 <ul>
 <li>singleton</li>
 <li>prototype</li>
 </ul>
 <p>singleton will create one instance of the module per dependency tree. prototype will always create a new instance of 
-your module, when it is requested. You can also write your own instantiation logic. Please have a look at <a href="tutorial-instantiator.html">instantiator</a></p>
+your module, when it is requested. You can also write your own instantiation logic. Please have a look at <a href="tutorial-instantiator.html">Instantiator</a></p>
 <p>alias defines an array of alias names, your module should be resolvable under. In the upper example, the module
 may also be referenced by the name <strong>MyCoolModule</strong> and <strong>AnotherCoolName</strong>. Be careful, this might clash with other module
 names, if you used the name already.</p>
@@ -70,7 +70,7 @@ as a module with a constructor without parameters and a singleton.</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AbstractInstantiator.html">AbstractInstantiator</a></li><li><a href="ConfigResolver.html">ConfigResolver</a></li><li><a href="DependencyTree.html">DependencyTree</a></li><li><a href="ModuleAnalyzer.html">ModuleAnalyzer</a></li><li><a href="ModuleResolver.html">ModuleResolver</a></li><li><a href="ObjectManager.html">ObjectManager</a></li><li><a href="Prototype.html">Prototype</a></li><li><a href="Singleton.html">Singleton</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-cache.html">cache</a></li><li><a href="tutorial-dependency_trees.html">dependency_trees</a></li><li><a href="tutorial-global_scope.html">global_scope</a></li><li><a href="tutorial-injection.html">injection</a></li><li><a href="tutorial-instantiator.html">instantiator</a></li><li><a href="tutorial-module_structure.html">module_structure</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Documentation</h3><ul><li>General</li><li><ul class="child-nav"><li><a href="tutorial-options.html">Options</a></li><li><a href="tutorial-injection.html">Injection</a></li><li><a href="tutorial-instantiator.html">Instantiator</a></li><li><a href="tutorial-module_structure.html">Module Structure</a></li></ul></li><li>Deep Dive</li><li><ul class="child-nav"><li><a href="tutorial-cache.html">Caching</a></li><li><a href="tutorial-dependency_trees.html">Dependency Trees</a></li><li><a href="tutorial-global_scope.html">Global Scope</a></li></ul></li></ul><h3>Classes</h3><ul><li><a href="AbstractInstantiator.html">AbstractInstantiator</a></li><li><a href="ConfigResolver.html">ConfigResolver</a></li><li><a href="DependencyTree.html">DependencyTree</a></li><li><a href="ModuleAnalyzer.html">ModuleAnalyzer</a></li><li><a href="ModuleResolver.html">ModuleResolver</a></li><li><a href="ObjectManager.html">ObjectManager</a></li><li><a href="Prototype.html">Prototype</a></li><li><a href="Singleton.html">Singleton</a></li></ul>
 </nav>
 
 <br class="clear">
