@@ -1,0 +1,34 @@
+{
+  "general": {
+    "title": "General",
+    "order": 1,
+    "children": ["options", "injection", "instantiator", "module_structure"]
+  },
+  "options": {
+    "title": "Options"
+  },
+  "injection": {
+    "title": "Injection"
+  },
+  "instantiator": {
+    "title": "Instantiator"
+  },
+  "module_structure": {
+    "title": "Module Structure"
+  },
+
+  "deep_dive": {
+    "order": 2,
+    "title": "Deep Dive",
+    "children": ["cache", "dependency_trees", "global_scope"]
+  },
+  "cache": {
+    "title": "Caching"
+  },
+  "dependency_trees": {
+    "title": "Dependency Trees"
+  },
+  "global_scope": {
+    "title": "Global Scope"
+  }
+}
