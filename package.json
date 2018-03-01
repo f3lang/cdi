@@ -6,7 +6,7 @@
   "scripts": {
     "test": "nyc --reporter=html mocha test/*.test.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "jsdoc": "./node_modules/.bin/jsdoc -c jsdoc-conf.json -r "
+    "jsdoc": "./node_modules/.bin/jsdoc -c jsdoc-conf.json -r -t jsdoc_template"
   },
   "repository": {
     "type": "git",
