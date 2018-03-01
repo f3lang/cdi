@@ -122,6 +122,10 @@ nav ul {
     list-style-type: none;
 }
 
+nav ul.child-nav {
+    text-indent: 15px;
+}
+
 nav ul a, nav ul a:visited, nav ul a:active {
     font-family: Consolas, Monaco, 'Andale Mono', monospace;
     line-height: 18px;
