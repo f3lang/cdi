@@ -1,0 +1,4 @@
+# exclude jsdoc template
+- "jsdoc_template"
+# exclude generated docs
+- "docs"
