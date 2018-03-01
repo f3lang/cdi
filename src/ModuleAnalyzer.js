@@ -13,7 +13,9 @@ class ModuleAnalyzer {
 	}
 
 	analyze(module) {
-		let dependencies = module.inject || [];
+		let moduleProperties = Object.getOwnPropertyNames(module);
+		let dependencies = moduleProperties.indexOf('inject') > -1 ? module.inject || [] : [];
+
 		return {
 			injectMap: dependencies.map(dep => {
 				if (dep.substring(0, 7) === 'config:') {
@@ -22,7 +24,7 @@ class ModuleAnalyzer {
 					return this.objectManager.getModuleInjector(dep);
 				}
 			}),
-			scope: module.scope || 'singleton'
+			scope: moduleProperties.indexOf('scope') ? module.scope || 'singleton' : 'singleton'
 		};
 	}
 
