@@ -201,6 +201,11 @@ class ObjectManager {
 		this.trees[root] = new DependencyTree(this, this.moduleResolver, root);
 	}
 
+	/**
+	 * Returns the injection configuration of a module
+	 * @param {String} moduleName The name of the module
+	 * @return {InjectionConfiguration}
+	 */
 	getInjectionConfiguration(moduleName) {
 		return this.moduleResolver.getResolvedModules().moduleMap[moduleName];
 	}
