@@ -12,5 +12,5 @@ class Bike extends Vehicle {
 }
 
 module.exports = Bike;
-module.exports.scope = ['singleton'];
+module.exports.scope = 'singleton';
 module.exports.inject = ['Route:root'];

@@ -11,6 +11,6 @@ class Bike {
 }
 
 module.exports = Bike;
-module.exports.scope = ['singleton'];
+module.exports.scope = 'singleton';
 module.exports.inject = ['WheelConfiguration', 'Route'];
 module.exports.alias = ['VeryCoolVehicle'];

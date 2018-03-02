@@ -15,4 +15,4 @@ class WheelConfiguration {
 }
 
 module.exports = WheelConfiguration;
-module.exports.scope = ['singleton'];
+module.exports.scope = 'singleton';

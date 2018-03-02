@@ -9,4 +9,4 @@ class Route {
 }
 
 module.exports = Route;
-module.exports.scope = ['prototype'];
+module.exports.scope = 'prototype';

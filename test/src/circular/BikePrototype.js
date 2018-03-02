@@ -10,5 +10,5 @@ class BikePrototype {
 }
 
 module.exports = BikePrototype;
-module.exports.scope = ['prototype'];
+module.exports.scope = 'prototype';
 module.exports.inject = ['Route'];
