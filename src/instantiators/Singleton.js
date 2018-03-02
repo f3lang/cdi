@@ -11,11 +11,13 @@ class Singleton extends AbstractInstantiator {
 
 	/**
 	 * @param {ObjectManager} objectManager
+	 * @param {PrototypeWrapper} prototypeWrapper
 	 */
-	constructor(objectManager) {
+	constructor(objectManager, prototypeWrapper) {
 		super();
 		this.cache = {};
 		this.objectManager = objectManager;
+		this.prototypeWrapper = prototypeWrapper;
 		this.requestCollection = [];
 	}
 
@@ -28,10 +30,14 @@ class Singleton extends AbstractInstantiator {
 		}
 		let params = this.objectManager.getModuleParams(config.injectMap, root, requestId);
 		delete require.cache[require.resolve(path)];
-		let module = require(path);
+		let resolvedModuleData = this.prototypeWrapper.require(path, root, requestId);
+		let module = resolvedModuleData.targetPrototype;
 		module.tree = root;
 		let instance = new module(...params);
 		this.cache[path + ":" + root] = instance;
+		if(resolvedModuleData.originalChain) {
+			this.prototypeWrapper.restoreOriginalPrototypeChain(resolvedModuleData.originalChain);
+		}
 		return instance;
 	}
 

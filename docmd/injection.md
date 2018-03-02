@@ -89,3 +89,7 @@ let myBike = cdi.getInstance('Bike');
 
 ### circular dependency
 circular depencencies will issue a warning in the console and the injected argument will be null.
+
+### prototype inheritance
+cdi can work with prototype inheritance and will also resolve dependencies in parent prototypes.
+For more details visit {@tutorial prototype_inheritance}

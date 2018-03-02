@@ -20,7 +20,7 @@
   "deep_dive": {
     "order": 2,
     "title": "Deep Dive",
-    "children": ["cache", "dependency_trees", "global_scope"]
+    "children": ["cache", "dependency_trees", "global_scope", "prototype_inheritance"]
   },
   "cache": {
     "title": "Caching"
@@ -30,5 +30,8 @@
   },
   "global_scope": {
     "title": "Global Scope"
+  },
+  "prototype_inheritance": {
+    "title": "Prototype Inheritance"
   }
 }

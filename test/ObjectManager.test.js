@@ -6,6 +6,8 @@ const path = require('path');
 let cacheFile = path.join(__dirname, 'cache', 'object_manager_cdi.json');
 let classPath = path.join(__dirname, 'src', 'testcase');
 let classPathCircular = path.join(__dirname, 'src', 'circular');
+let classPathPrototype = path.join(__dirname, 'src', 'prototype_chain');
+
 let testConfiguration = {
 	fruit: {
 		name: "banana"
@@ -187,6 +189,64 @@ describe("Object Manager", function () {
 			let bike2 = objectManager2.getInstance("Bike");
 			expect(bike.uuid).not.to.eql(bike2.uuid);
 		});
+
+	});
+
+	describe("Prototype traversal", function () {
+
+		it("will work on prototype extension (es6 syntax 'extends className')", function () {
+			let objectManager = new ObjectManager({
+				moduleSrc: [classPathPrototype]
+			});
+			let bike = objectManager.getInstance('Bike');
+			expect(bike.wheelConfiguration).to.exist;
+		});
+
+		it("injection will use existing instance", function () {
+			let objectManager = new ObjectManager({
+				moduleSrc: [classPathPrototype]
+			});
+			let wheelConfiguration = objectManager.getInstance('WheelConfiguration');
+			let bike = objectManager.getInstance('Bike');
+			expect(bike.wheelConfiguration.uuid).to.eql(wheelConfiguration.uuid);
+		});
+
+		it("will allow constructor arguments in parent classes", function () {
+			let objectManager = new ObjectManager({
+				moduleSrc: [classPathPrototype]
+			});
+			let car = objectManager.getInstance('Car');
+			expect(car.unique_color).to.eql(car.color);
+		});
+
+		it("will jump over classes without injection", function () {
+			let objectManager = new ObjectManager({
+				moduleSrc: [classPathPrototype]
+			});
+			let motorBike = objectManager.getInstance('MotorBike');
+			let wheelConfiguration = objectManager.getInstance('WheelConfiguration');
+			expect(motorBike.wheelConfiguration.uuid).to.eql(wheelConfiguration.uuid);
+		});
+
+		it("will still work with external classes out of scope", function () {
+			let objectManager = new ObjectManager({
+				moduleSrc: [classPathPrototype]
+			});
+			let ship = objectManager.getInstance('Ship');
+			expect(ship.floats).to.be.true;
+		});
+
+		it("will cleanup the prototype chain after initialization", function () {
+			let objectManager = new ObjectManager({
+				moduleSrc: [classPathPrototype]
+			});
+			let motorBike = objectManager.getInstance('MotorBike');
+			let objectManager2 = new ObjectManager({
+				moduleSrc: [classPathPrototype]
+			});
+			let motorBike2 = objectManager2.getInstance('MotorBike');
+			expect(motorBike2.color).to.eql('green');
+		})
 
 	});
 
