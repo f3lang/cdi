@@ -1,6 +1,6 @@
 {
   "name": "cdi",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "The Cool Dependency Injection. An easy to use powerful intuitive dependency injection manager",
   "main": "index.js",
   "scripts": {
