@@ -36,7 +36,7 @@ class ModuleAnalyzer {
 
 	analyze(module) {
 		let moduleProperties = Object.getOwnPropertyNames(module);
-		let dependencies = moduleProperties.indexOf('inject') > -1 ? module.inject || [] : [];
+		let dependencies = moduleProperties.indexOf('inject') > -1 ? module.inject : [];
 
 		return {
 			injectMap: dependencies.map(dep => {
@@ -46,7 +46,7 @@ class ModuleAnalyzer {
 					return this.objectManager.getModuleInjector(dep);
 				}
 			}),
-			scope: moduleProperties.indexOf('scope') ? module.scope || 'singleton' : 'singleton'
+			scope: moduleProperties.indexOf('scope') > -1 ? module.scope : 'singleton'
 		};
 	}
 

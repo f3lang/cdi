@@ -94,7 +94,7 @@ class ModuleResolver {
 	fetchModule(modulePath) {
 		let module = require(modulePath);
 		let moduleConfig = this.moduleAnalyzer.analyze(module);
-		let moduleNames = Object.getOwnPropertyNames(module).indexOf('alias') > -1 ? module.alias || [] : [];
+		let moduleNames = Object.getOwnPropertyNames(module).indexOf('alias') > -1 ? module.alias : [];
 		moduleNames.push(module.name);
 		let i = moduleNames.length;
 		while (i--) {
