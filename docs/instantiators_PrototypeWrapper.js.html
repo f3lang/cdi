@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>CDI: Source: instantiators/PrototypeWrapper.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: instantiators/PrototypeWrapper.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @typedef Object PrototypeWrap
+ * @property {Object} targetPrototype The proxied and wired up prototype to use
+ * @property {Array} originalChain The original prototype chain to use later to restore the prototype
+ */
+
+/**
+ * The Prototype Wrapper will resolve dependencies up in the prototype tree.
+ * If you require a module which inherits other prototypes, this wrapper will insert proxies in
+ * between the inheritance steps which then will handle the dependency injections in the parent
+ * prototypes. You can still call super() with arguments in the constructor, the supplied arguments
+ * will then be appended to the injected properties in the constructor of the parent prototype.
+ *
+ * @author Wolfgang Felbermeier (@f3lang)
+ */
+class PrototypeWrapper {
+
+	constructor(objectManager) {
+		this.objectManager = objectManager;
+	}
+
+	/**
+	 * Will wrap the node require and inject prototype proxies for the dependency injection.
+	 * @param {String} module The path of the module to require
+	 * @param {String} root The identifier of the tree to work in
+	 * @param {String} requestId The id of the current injection request
+	 * @return {PrototypeWrap} An Object containing the resolved prototype and the original chain
+	 */
+	require(module, root, requestId) {
+		let mod = require(module);
+		let prototypeChain = this.buildPrototypeChain(mod);
+		if (prototypeChain.length === 1) {
+			// no chain detected so we can continue with a regular require()
+			return {targetPrototype: mod, originalChain: null};
+		} else if (prototypeChain.length === 2) {
+			// chain with one level of inheritance detected
+			let targetPrototype = prototypeChain[0];
+			let wrappedParentPrototype = this.wrapPrototype(prototypeChain[1], root, requestId + prototypeChain[1].name);
+			Object.setPrototypeOf(targetPrototype, wrappedParentPrototype);
+			return {targetPrototype, originalChain: prototypeChain};
+		}
+		// more complex chain detected with multiple levels of inheritance
+		let originalChain = prototypeChain.slice();
+		let i = prototypeChain.length;
+		let targetPrototype = prototypeChain[i - 2];
+		while (i-- &amp;&amp; i > 1) {
+			let upperPrototype = prototypeChain[i];
+			let proxiedUpperPrototype = this.wrapPrototype(upperPrototype, root, requestId + upperPrototype.name);
+			Object.setPrototypeOf(targetPrototype, proxiedUpperPrototype);
+			prototypeChain[i - 1] = targetPrototype;
+			targetPrototype = prototypeChain[i - 2];
+		}
+		Object.setPrototypeOf(targetPrototype, prototypeChain[1]);
+		return {targetPrototype, originalChain};
+	}
+
+	/**
+	 * Will traverse the prototype chain recursively up to the top and convert
+	 * it to an array.
+	 * @param {Object} prototype The prototype to build a chain for
+	 * @return {Array} An array with all prototypes of the chain ordered from bottom to top.
+	 */
+	buildPrototypeChain(prototype) {
+		let chain = [];
+		chain.push(prototype);
+		if (Object.getPrototypeOf(prototype) !== Object.getPrototypeOf(class {
+			})) {
+			chain.push(...this.buildPrototypeChain(Object.getPrototypeOf(prototype)));
+		}
+		return chain;
+	}
+
+	/**
+	 * Will wrap a prototype in a proxy, that will inject the dependencies into the
+	 * original prototype constructor.
+	 * @param {Object} prototype The prototype to wrap
+	 * @param {String} root The identifier of the tree to work in
+	 * @param {String} requestId The id of the current injection request
+	 * @return {Object} The wrapped prototype
+	 */
+	wrapPrototype(prototype, root, requestId) {
+		let injectConfiguration = this.objectManager.getInjectionConfiguration(prototype.name);
+		if (!injectConfiguration || injectConfiguration.config.injectMap.length === 0) {
+			return prototype;
+		}
+		let params = this.objectManager.getModuleParams(injectConfiguration.config.injectMap, root, requestId);
+		return class extends prototype {
+			constructor(...args) {
+				super(...params, ...args);
+			}
+		};
+	}
+
+	/**
+	 * After instantiation of the module it is important to restore the original
+	 * prototype tree, since node will somehow cache it, which will lead to problems
+	 * when traversing the tree again.
+	 * @param {Array} originalChain The original prototype chain as an Array
+	 */
+	restoreOriginalPrototypeChain(originalChain) {
+		if (originalChain.length === 2) {
+			Object.setPrototypeOf(originalChain[0], originalChain[1]);
+			return;
+		}
+		let i = originalChain.length - 1;
+		while (i--) {
+			Object.setPrototypeOf(originalChain[i], originalChain[i + 1]);
+		}
+	}
+
+}
+
+module.exports = PrototypeWrapper;
+module.exports.inject = ['ObjectManager'];</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Documentation</h3><ul><li>General</li><li><ul class="child-nav"><li><a href="tutorial-options.html">Options</a></li><li><a href="tutorial-injection.html">Injection</a></li><li><a href="tutorial-instantiator.html">Instantiator</a></li><li><a href="tutorial-module_structure.html">Module Structure</a></li></ul></li><li>Deep Dive</li><li><ul class="child-nav"><li><a href="tutorial-cache.html">Caching</a></li><li><a href="tutorial-dependency_trees.html">Dependency Trees</a></li><li><a href="tutorial-global_scope.html">Global Scope</a></li><li><a href="tutorial-prototype_inheritance.html">Prototype Inheritance</a></li></ul></li></ul><h3>Classes</h3><ul><li><a href="AbstractInstantiator.html">AbstractInstantiator</a></li><li><a href="ConfigResolver.html">ConfigResolver</a></li><li><a href="DependencyTree.html">DependencyTree</a></li><li><a href="ModuleAnalyzer.html">ModuleAnalyzer</a></li><li><a href="ModuleResolver.html">ModuleResolver</a></li><li><a href="ObjectManager.html">ObjectManager</a></li><li><a href="Prototype.html">Prototype</a></li><li><a href="PrototypeWrapper.html">PrototypeWrapper</a></li><li><a href="Singleton.html">Singleton</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

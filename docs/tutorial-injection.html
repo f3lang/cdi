@@ -95,6 +95,8 @@ let cdi = new CDI({
 
 let myBike = cdi.getInstance('Bike');
 // now you got your bike with injected wheels, which got the size information injected</code></pre><h3>circular dependency</h3><p>circular depencencies will issue a warning in the console and the injected argument will be null.</p>
+<h3>prototype inheritance</h3><p>cdi can work with prototype inheritance and will also resolve dependencies in parent prototypes.
+For more details visit <a href="tutorial-prototype_inheritance.html">Prototype Inheritance</a></p>
 </article>
 
 </section>
@@ -102,7 +104,7 @@ let myBike = cdi.getInstance('Bike');
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Documentation</h3><ul><li>General</li><li><ul class="child-nav"><li><a href="tutorial-options.html">Options</a></li><li><a href="tutorial-injection.html">Injection</a></li><li><a href="tutorial-instantiator.html">Instantiator</a></li><li><a href="tutorial-module_structure.html">Module Structure</a></li></ul></li><li>Deep Dive</li><li><ul class="child-nav"><li><a href="tutorial-cache.html">Caching</a></li><li><a href="tutorial-dependency_trees.html">Dependency Trees</a></li><li><a href="tutorial-global_scope.html">Global Scope</a></li></ul></li></ul><h3>Classes</h3><ul><li><a href="AbstractInstantiator.html">AbstractInstantiator</a></li><li><a href="ConfigResolver.html">ConfigResolver</a></li><li><a href="DependencyTree.html">DependencyTree</a></li><li><a href="ModuleAnalyzer.html">ModuleAnalyzer</a></li><li><a href="ModuleResolver.html">ModuleResolver</a></li><li><a href="ObjectManager.html">ObjectManager</a></li><li><a href="Prototype.html">Prototype</a></li><li><a href="Singleton.html">Singleton</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Documentation</h3><ul><li>General</li><li><ul class="child-nav"><li><a href="tutorial-options.html">Options</a></li><li><a href="tutorial-injection.html">Injection</a></li><li><a href="tutorial-instantiator.html">Instantiator</a></li><li><a href="tutorial-module_structure.html">Module Structure</a></li></ul></li><li>Deep Dive</li><li><ul class="child-nav"><li><a href="tutorial-cache.html">Caching</a></li><li><a href="tutorial-dependency_trees.html">Dependency Trees</a></li><li><a href="tutorial-global_scope.html">Global Scope</a></li><li><a href="tutorial-prototype_inheritance.html">Prototype Inheritance</a></li></ul></li></ul><h3>Classes</h3><ul><li><a href="AbstractInstantiator.html">AbstractInstantiator</a></li><li><a href="ConfigResolver.html">ConfigResolver</a></li><li><a href="DependencyTree.html">DependencyTree</a></li><li><a href="ModuleAnalyzer.html">ModuleAnalyzer</a></li><li><a href="ModuleResolver.html">ModuleResolver</a></li><li><a href="ObjectManager.html">ObjectManager</a></li><li><a href="Prototype.html">Prototype</a></li><li><a href="PrototypeWrapper.html">PrototypeWrapper</a></li><li><a href="Singleton.html">Singleton</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <br class="clear">

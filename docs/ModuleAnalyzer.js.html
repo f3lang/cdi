@@ -27,6 +27,28 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
+ * @typedef {Object} Injector
+ * @property {String} type The type of data to inject. May be either module or config
+ * @property {String} tree The tree to use for injection.
+ * @property {String} module The resolved module to inject
+ * @property {String} moduleIdentifier The raw module identifier
+ * @property {String} root The configuration root to use for the configuration
+ * @property {String} path The configuration path to use for the injection
+ * @property {String} identifier The raw configuration identifier
+ */
+
+/**
+ * @typedef {Object} InjectionConfiguration
+ * @property {String} path The path of the module source file
+ * @property {String} name The name of the module in the object manager
+ * @property {String} originModuleName Since you can use aliases for a module, you need to know the original module name. Here it is ;)
+ * @property {Object} config The configuration of the module injection setup
+ * @property {String} [config.scope=singleton] The scope of the module.
+ * @property {Injector[]} config.injectMap The inject map consisting of multiple Injector properties
+ */
+
+
+/**
  * The module analyzer will analyze modules. no shit.
  * Jokes aside. It will analyze, which modules need
  * to be injected, what can be resolved through configuration
@@ -41,7 +63,9 @@ class ModuleAnalyzer {
 	}
 
 	analyze(module) {
-		let dependencies = module.inject || [];
+		let moduleProperties = Object.getOwnPropertyNames(module);
+		let dependencies = moduleProperties.indexOf('inject') > -1 ? module.inject : [];
+
 		return {
 			injectMap: dependencies.map(dep => {
 				if (dep.substring(0, 7) === 'config:') {
@@ -50,7 +74,7 @@ class ModuleAnalyzer {
 					return this.objectManager.getModuleInjector(dep);
 				}
 			}),
-			scope: module.scope || 'singleton'
+			scope: moduleProperties.indexOf('scope') > -1 ? module.scope : 'singleton'
 		};
 	}
 
@@ -68,7 +92,7 @@ module.exports.scope = 'singleton';</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Documentation</h3><ul><li>General</li><li><ul class="child-nav"><li><a href="tutorial-options.html">Options</a></li><li><a href="tutorial-injection.html">Injection</a></li><li><a href="tutorial-instantiator.html">Instantiator</a></li><li><a href="tutorial-module_structure.html">Module Structure</a></li></ul></li><li>Deep Dive</li><li><ul class="child-nav"><li><a href="tutorial-cache.html">Caching</a></li><li><a href="tutorial-dependency_trees.html">Dependency Trees</a></li><li><a href="tutorial-global_scope.html">Global Scope</a></li></ul></li></ul><h3>Classes</h3><ul><li><a href="AbstractInstantiator.html">AbstractInstantiator</a></li><li><a href="ConfigResolver.html">ConfigResolver</a></li><li><a href="DependencyTree.html">DependencyTree</a></li><li><a href="ModuleAnalyzer.html">ModuleAnalyzer</a></li><li><a href="ModuleResolver.html">ModuleResolver</a></li><li><a href="ObjectManager.html">ObjectManager</a></li><li><a href="Prototype.html">Prototype</a></li><li><a href="Singleton.html">Singleton</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Documentation</h3><ul><li>General</li><li><ul class="child-nav"><li><a href="tutorial-options.html">Options</a></li><li><a href="tutorial-injection.html">Injection</a></li><li><a href="tutorial-instantiator.html">Instantiator</a></li><li><a href="tutorial-module_structure.html">Module Structure</a></li></ul></li><li>Deep Dive</li><li><ul class="child-nav"><li><a href="tutorial-cache.html">Caching</a></li><li><a href="tutorial-dependency_trees.html">Dependency Trees</a></li><li><a href="tutorial-global_scope.html">Global Scope</a></li><li><a href="tutorial-prototype_inheritance.html">Prototype Inheritance</a></li></ul></li></ul><h3>Classes</h3><ul><li><a href="AbstractInstantiator.html">AbstractInstantiator</a></li><li><a href="ConfigResolver.html">ConfigResolver</a></li><li><a href="DependencyTree.html">DependencyTree</a></li><li><a href="ModuleAnalyzer.html">ModuleAnalyzer</a></li><li><a href="ModuleResolver.html">ModuleResolver</a></li><li><a href="ObjectManager.html">ObjectManager</a></li><li><a href="Prototype.html">Prototype</a></li><li><a href="PrototypeWrapper.html">PrototypeWrapper</a></li><li><a href="Singleton.html">Singleton</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <br class="clear">
