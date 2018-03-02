@@ -4,6 +4,7 @@ const Singleton = require('./instantiators/Singleton');
 const Prototype = require('./instantiators/Prototype');
 const DependencyTree = require('./DependencyTree');
 const ModuleResolver = require('./ModuleResolver');
+const PrototypeWrapper = require('./instantiators/PrototypeWrapper');
 const uuid = require('uuid').v4;
 
 /**
@@ -57,8 +58,9 @@ class ObjectManager {
 			this.addConfiguration(options.configurations[key], key);
 		});
 		this.moduleResolver = new ModuleResolver(this.options.moduleSrc, this.options.cacheFile, this.moduleAnalyzer);
-		this.registerInstantiator('singleton', new Singleton(this));
-		this.registerInstantiator('prototype', new Prototype(this));
+		this.prototypeWrapper = new PrototypeWrapper(this);
+		this.registerInstantiator('singleton', new Singleton(this, this.prototypeWrapper));
+		this.registerInstantiator('prototype', new Prototype(this, this.prototypeWrapper));
 		this.addDependencyTree('root');
 	}
 
@@ -197,6 +199,10 @@ class ObjectManager {
 			throw new Error('Tree with root "' + root + '" already exists');
 		}
 		this.trees[root] = new DependencyTree(this, this.moduleResolver, root);
+	}
+
+	getInjectionConfiguration(moduleName) {
+		return this.moduleResolver.getResolvedModules().moduleMap[moduleName];
 	}
 
 }

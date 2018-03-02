@@ -7,9 +7,10 @@ const AbstractInstantiator = require('./AbstractInstantiator');
  */
 class Prototype extends  AbstractInstantiator {
 
-	constructor(objectManager){
+	constructor(objectManager, prototypeWrapper){
 		super();
 		this.objectManager = objectManager;
+		this.prototypeWrapper = prototypeWrapper;
 		this.requestCollection = [];
 	}
 
@@ -19,9 +20,14 @@ class Prototype extends  AbstractInstantiator {
 		}
 		let params = this.objectManager.getModuleParams(config.injectMap, root, requestId);
 		delete require.cache[require.resolve(path)];
-		let module = require(path);
+		let resolvedModuleData = this.prototypeWrapper.require(path, root, requestId);
+		let module = resolvedModuleData.targetPrototype;
 		module.tree = root;
-		return new module(...params);
+		let instance = new module(...params);
+		if(resolvedModuleData.originalChain) {
+			this.prototypeWrapper.restoreOriginalPrototypeChain(resolvedModuleData.originalChain);
+		}
+		return instance;
 	}
 }
 
