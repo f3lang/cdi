@@ -61,6 +61,14 @@ describe("Object Manager", function () {
 		expect(() => objectManager.getInstantiator("bananarama")).to.throw();
 	});
 
+	it("will fail on requesting a non existing module", function () {
+		let objectManager = new ObjectManager({
+			moduleSrc: [classPath],
+			configurations: {test: testConfiguration}
+		});
+		expect(() => objectManager.getInstance("bananarama")).to.throw();
+	});
+
 	it("won't add duplicated dependency trees", function () {
 		let objectManager = new ObjectManager({
 			moduleSrc: [classPath],
