@@ -276,4 +276,17 @@ describe("Object Manager", function () {
 		expect(objectManager.getInstance("DependencyTree", "banana")).to.eql(objectManager.trees.banana);
 	});
 
+	it("will create a new unique request id for each dependency request", function() {
+		let objectManager = new ObjectManager({
+			moduleSrc: [classPath]
+		});
+		objectManager.trees["mockTree"] = {
+			getInstance: (moduleName, _requestId) => {
+				return _requestId;
+			}
+		};
+		expect(objectManager.getInstance("Irrelevant", "mockTree")).not.to.eql(objectManager.getInstance("Irrelevant", "mockTree"));
+		expect(objectManager.getInstance("Irrelevant", "mockTree")).to.be.lessThan(objectManager.getInstance("Irrelevant", "mockTree"));
+	});
+
 });
