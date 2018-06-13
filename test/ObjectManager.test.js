@@ -151,6 +151,15 @@ describe("Object Manager", function () {
 			expect(wheelConfiguration.uuid).not.to.equal(bike.wheelConfiguration.uuid);
 		});
 
+		it("instance can access the tree id", function(){
+			let objectManager = new ObjectManager({
+				moduleSrc: [classPath]
+			});
+			let bike = objectManager.getInstance("Bike");
+			let wheelConfiguration = objectManager.getInstance("WheelConfiguration", "mine");
+			expect(wheelConfiguration.getTreeName()).to.equal("mine");
+		});
+
 		it("instance tree may be forced", function () {
 			let objectManager = new ObjectManager({
 				moduleSrc: [classPath]
