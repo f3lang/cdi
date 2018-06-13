@@ -263,6 +263,14 @@ describe("Object Manager", function () {
 			});
 			let motorBike2 = objectManager2.getInstance('MotorBike');
 			expect(motorBike2.color).to.eql('green');
+		});
+
+		it("traversion of dependency tree will work", function() {
+			let objectManager = new ObjectManager({
+				moduleSrc: [classPathPrototype]
+			});
+			let bike = objectManager.getInstance('Bike', 'mine');
+			expect(bike.getHighestLevelTree()).to.equal('mine');
 		})
 
 	});

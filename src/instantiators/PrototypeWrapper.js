@@ -80,12 +80,14 @@ class PrototypeWrapper {
 	 */
 	wrapPrototype(prototype, root, requestId) {
 		let injectConfiguration = this.objectManager.getInjectionConfiguration(prototype.name);
+		prototype.tree = root;
 		if (!injectConfiguration || injectConfiguration.config.injectMap.length === 0) {
 			return prototype;
 		}
 		let params = this.objectManager.getModuleParams(injectConfiguration.config.injectMap, root, requestId);
 		return class extends prototype {
 			constructor(...args) {
+				module.exports.tree = root;
 				super(...params, ...args);
 			}
 		};

@@ -5,6 +5,10 @@ class Vehicle {
 		this.color = color;
 	}
 
+	getHighestLevelTree(){
+		return module.exports.tree;
+	}
+
 }
 
 module.exports = Vehicle;
