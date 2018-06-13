@@ -61,6 +61,14 @@ describe("Object Manager", function () {
 		expect(() => objectManager.getInstantiator("bananarama")).to.throw();
 	});
 
+	it("will fail on requesting a non existing module", function () {
+		let objectManager = new ObjectManager({
+			moduleSrc: [classPath],
+			configurations: {test: testConfiguration}
+		});
+		expect(() => objectManager.getInstance("bananarama")).to.throw();
+	});
+
 	it("won't add duplicated dependency trees", function () {
 		let objectManager = new ObjectManager({
 			moduleSrc: [classPath],
@@ -275,6 +283,19 @@ describe("Object Manager", function () {
 			moduleSrc: [classPath]
 		});
 		expect(objectManager.getInstance("DependencyTree", "banana")).to.eql(objectManager.trees.banana);
+	});
+
+	it("will create a new unique request id for each dependency request", function() {
+		let objectManager = new ObjectManager({
+			moduleSrc: [classPath]
+		});
+		objectManager.trees["mockTree"] = {
+			getInstance: (moduleName, _requestId) => {
+				return _requestId;
+			}
+		};
+		expect(objectManager.getInstance("Irrelevant", "mockTree")).not.to.eql(objectManager.getInstance("Irrelevant", "mockTree"));
+		expect(objectManager.getInstance("Irrelevant", "mockTree")).to.be.lessThan(objectManager.getInstance("Irrelevant", "mockTree"));
 	});
 
 });

@@ -28,6 +28,9 @@ class DependencyTree {
 	 */
 	getInstance(moduleName, requestId) {
 		let moduleMeta = this.moduleResolver.getResolvedModules().moduleMap[moduleName];
+		if(!moduleMeta) {
+			throw new Error('[cdi] Module with identifier "' + moduleName + '" not found');
+		}
 		let scope = moduleMeta.config.scope;
 		let instantiator = this.objectManager.getInstantiator(scope);
 		return instantiator.getInstance(moduleMeta.path, moduleMeta.config, this.identifier, requestId);

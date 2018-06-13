@@ -33,7 +33,6 @@ const Prototype = require('./instantiators/Prototype');
 const DependencyTree = require('./DependencyTree');
 const ModuleResolver = require('./ModuleResolver');
 const PrototypeWrapper = require('./instantiators/PrototypeWrapper');
-const uuid = require('uuid').v4;
 
 /**
  * The ObjectManager is the central component which instantiates modules,
@@ -90,6 +89,7 @@ class ObjectManager {
 		this.registerInstantiator('singleton', new Singleton(this, this.prototypeWrapper));
 		this.registerInstantiator('prototype', new Prototype(this, this.prototypeWrapper));
 		this.addDependencyTree('root');
+		this.nextRequestID = 0;
 	}
 
 	/**
@@ -120,10 +120,10 @@ class ObjectManager {
 	 * Requests an instance of a module. All dependencies will be injected also into submodules.
 	 * @param {string} moduleName The name of the module. Must match the Module name or one of its alias
 	 * @param {string=} treeIdentifier The tree to use. Default is "root"
-	 * @param {string=} _requestId Internal parameter to detect circular dependencies
+	 * @param {int=} _requestId Internal parameter to detect circular dependencies
 	 * @return {*}
 	 */
-	requestInstanceOfModule(moduleName, treeIdentifier = 'root', _requestId = uuid()) {
+	requestInstanceOfModule(moduleName, treeIdentifier = 'root', _requestId = this.nextRequestID++) {
 		switch (moduleName) {
 			case 'ObjectManager':
 				return this;
