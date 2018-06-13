@@ -12,6 +12,10 @@ class WheelConfiguration {
 		};
 	}
 
+	getTreeName(){
+		return module.exports.tree;
+	}
+
 }
 
 module.exports = WheelConfiguration;
