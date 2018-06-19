@@ -1,1 +1,5 @@
-module.exports = require('./src/ObjectManager');
+/**
+ * @type {ObjectManager}
+ */
+const ObjectManager = require('./src/ObjectManager');
+module.exports = ObjectManager;
