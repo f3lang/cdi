@@ -4,6 +4,10 @@ node_modules
 .[iI]dea
 coverage
 docmd
+jsdoc_template
+README_jsdoc.md
+.codeclimate.yml
+jsdoc-conf.json
 docs
 test
 .travis.yml
