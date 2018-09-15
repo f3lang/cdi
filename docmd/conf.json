@@ -2,10 +2,13 @@
   "general": {
     "title": "General",
     "order": 1,
-    "children": ["options", "injection", "instantiator", "module_structure"]
+    "children": ["options", "connect", "injection", "instantiator", "module_structure"]
   },
   "options": {
     "title": "Options"
+  },
+  "connect": {
+    "title": "Connect"
   },
   "injection": {
     "title": "Injection"
