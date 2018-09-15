@@ -7,6 +7,8 @@ let cacheFile = path.join(__dirname, 'cache', 'object_manager_cdi.json');
 let classPath = path.join(__dirname, 'src', 'testcase');
 let classPathCircular = path.join(__dirname, 'src', 'circular');
 let classPathPrototype = path.join(__dirname, 'src', 'prototype_chain');
+let classPathModule1 = path.join(__dirname, 'src', 'modules', 'module1');
+let classPathModule2 = path.join(__dirname, 'src', 'modules', 'module2');
 
 let testConfiguration = {
 	fruit: {
@@ -159,7 +161,7 @@ describe("Object Manager", function () {
 			expect(wheelConfiguration.uuid).not.to.equal(bike.wheelConfiguration.uuid);
 		});
 
-		it("instance can access the tree id", function(){
+		it("instance can access the tree id", function () {
 			let objectManager = new ObjectManager({
 				moduleSrc: [classPath]
 			});
@@ -265,7 +267,7 @@ describe("Object Manager", function () {
 			expect(motorBike2.color).to.eql('green');
 		});
 
-		it("traversion of dependency tree will work", function() {
+		it("traversion of dependency tree will work", function () {
 			let objectManager = new ObjectManager({
 				moduleSrc: [classPathPrototype]
 			});
@@ -293,7 +295,7 @@ describe("Object Manager", function () {
 		expect(objectManager.getInstance("DependencyTree", "banana")).to.eql(objectManager.trees.banana);
 	});
 
-	it("will create a new unique request id for each dependency request", function() {
+	it("will create a new unique request id for each dependency request", function () {
 		let objectManager = new ObjectManager({
 			moduleSrc: [classPath]
 		});
@@ -305,5 +307,58 @@ describe("Object Manager", function () {
 		expect(objectManager.getInstance("Irrelevant", "mockTree")).not.to.eql(objectManager.getInstance("Irrelevant", "mockTree"));
 		expect(objectManager.getInstance("Irrelevant", "mockTree")).to.be.lessThan(objectManager.getInstance("Irrelevant", "mockTree"));
 	});
+
+	describe("Connect other Object Managers", function () {
+
+		it("can resolve modules of connected object managers", function() {
+			let objectManager = new ObjectManager({
+				moduleSrc: [classPathModule1]
+			});
+			let objectManager2 = new ObjectManager({
+				moduleSrc: [classPathModule2]
+			});
+			objectManager.connectObjectManager(objectManager2);
+			let instance = objectManager.getInstance("Test2");
+			expect(instance.targetClass).to.equal("Test2");
+		});
+
+		it("own modules will have precedence over modules of additional object managers", function() {
+			let objectManager = new ObjectManager({
+				moduleSrc: [classPathModule1]
+			});
+			let objectManager2 = new ObjectManager({
+				moduleSrc: [classPathModule1]
+			});
+			let instance1 = objectManager.getInstance("Test1");
+			objectManager.connectObjectManager(objectManager2);
+			let instance2 = objectManager.getInstance("Test1");
+			expect(instance1.id).to.equal(instance2.id);
+		});
+
+		it("will still crash on non existing modules in all object managers", function() {
+			let objectManager = new ObjectManager({
+				moduleSrc: [classPathModule1]
+			});
+			let objectManager2 = new ObjectManager({
+				moduleSrc: [classPathModule2]
+			});
+			objectManager.connectObjectManager(objectManager2);
+			expect(() => objectManager.getInstance("Test3")).to.throw();
+		});
+
+		it("will work on adding the same object manager multiple times", function() {
+			let objectManager = new ObjectManager({
+				moduleSrc: [classPathModule1]
+			});
+			let objectManager2 = new ObjectManager({
+				moduleSrc: [classPathModule2]
+			});
+			objectManager.connectObjectManager(objectManager2);
+			objectManager.connectObjectManager(objectManager2);
+		});
+
+
+
+	})
 
 });
