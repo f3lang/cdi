@@ -62,6 +62,7 @@ class ObjectManager {
 		this.registerInstantiator('prototype', new Prototype(this, this.prototypeWrapper));
 		this.addDependencyTree('root');
 		this.nextRequestID = 0;
+		this.connectedObjectManagers = [];
 	}
 
 	/**
@@ -111,6 +112,12 @@ class ObjectManager {
 			case 'ModuleResolver':
 				return this.moduleResolver;
 			default:
+				if (!this.moduleResolver.getResolvedModules().moduleMap[moduleName]) {
+					let targetObjectManager = this.getContainingObjectManager(moduleName);
+					if (targetObjectManager) {
+						return targetObjectManager.requestInstanceOfModule(moduleName, treeIdentifier, _requestId);
+					}
+				}
 				if (!this.trees[treeIdentifier]) {
 					this.addDependencyTree(treeIdentifier);
 				}
@@ -208,6 +215,36 @@ class ObjectManager {
 	 */
 	getInjectionConfiguration(moduleName) {
 		return this.moduleResolver.getResolvedModules().moduleMap[moduleName];
+	}
+
+	/**
+	 * Connect another object manager to this instance. Local
+	 * resolvable modules will have precedence before modules
+	 * of additional object managers.
+	 * @param {ObjectManager} objectManager The object manager to connect
+	 */
+	connectObjectManager(objectManager) {
+		if (this.connectedObjectManagers.indexOf(objectManager) < 0) {
+			this.connectedObjectManagers.push(objectManager);
+		}
+	}
+
+	/**
+	 * Get the object manager which can create an instance of the module.
+	 * If no available object manager including this instance can resolve the
+	 * module, nothing is returned.
+	 * @param {string} moduleName
+	 * @return {ObjectManager}
+	 */
+	getContainingObjectManager(moduleName) {
+		if (this.moduleResolver.getResolvedModules().moduleMap[moduleName]) {
+			return this;
+		}
+		for (let i = 0; i < this.connectedObjectManagers.length; i++) {
+			if (this.connectedObjectManagers[i].getContainingObjectManager(moduleName)) {
+				return this.connectedObjectManagers[i];
+			}
+		}
 	}
 
 }
