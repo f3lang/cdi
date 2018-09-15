@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>CDI: Documentation: Instantiator</title>
+    <title>CDI: Documentation: Connect</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,31 +17,29 @@
 
 <div id="main">
 
-    <h1 class="page-title">Documentation: Instantiator</h1>
+    <h1 class="page-title">Documentation: Connect</h1>
 
     <section>
 
 <header>
     
 
-    <h2>Instantiator</h2>
+    <h2>Connect</h2>
 </header>
 
 <article>
-    <p>Instantiators are the classes that effectively do the instantiation of your module. 
-cdi comes right now with two instantiators included, but you may build your own if you want.
-(e.g. you could create a wrapper around an API and inject it) It is up to you what you want 
-to build.</p>
-<h3>singleton</h3><p>The singleton instantiator will create a maximum of one instance per dependency tree. When you request 
-the module again inside the same dependency tree, you will get the very same instance as before.</p>
-<h3>prototype</h3><p>The prototype instantiator will always create a new instance of a module.</p>
-<h3>custom</h3><p>If you want to build your own instantiator, best have a look at <a href="Prototype.html">Prototype</a>, because this is 
-a very simple example how to build an instantiator.
-After you build your instantiator, you can register it in the objectmanager to make it available:</p>
-<pre class="prettyprint source lang-js"><code>let instantiator = new CustomInstantiator();
-cdi.registerInstantiator('customKeyword', instantiator);</code></pre><p>And there we go, now you can create instances with you own instantiator and build whatever you want.
-Just set the scope of your modules, you want to instantiate with your custom instantiator, to your
-custom keyword.</p>
+    <h3>Connect other object managers</h3><p>You can connect other object managers to an existing one:</p>
+<pre class="prettyprint source lang-js"><code>let cdi1 = new CDI({});
+let cdi2 = new CDI({});
+cdi.connectObjectManager(cdi1);
+
+// now you can resolve modules from cdi2 through cdi1:
+let instance = cdi1.getInstance('ClassNameOnlyExistingInCDI2');</code></pre><p>You can connect as many object managers as you want to an existing object manager. The first Object 
+Manager which is able to instantiate an object will be responsible to do so. If a connected Object Manager
+is able to instantiate a module with the same identifier as the origin object manager 
+(in the upper example cdi1), the origin object manager has precedence over the connected object managers.
+So to come back to the upper example, if you request an instance of a module resolvable by both of the 
+object managers and you request the instance from <strong>cdi1</strong>, the instance of cdi1 will be returned.</p>
 </article>
 
 </section>

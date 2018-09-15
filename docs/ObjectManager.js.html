@@ -90,6 +90,7 @@ class ObjectManager {
 		this.registerInstantiator('prototype', new Prototype(this, this.prototypeWrapper));
 		this.addDependencyTree('root');
 		this.nextRequestID = 0;
+		this.connectedObjectManagers = [];
 	}
 
 	/**
@@ -139,6 +140,12 @@ class ObjectManager {
 			case 'ModuleResolver':
 				return this.moduleResolver;
 			default:
+				if (!this.moduleResolver.getResolvedModules().moduleMap[moduleName]) {
+					let targetObjectManager = this.getContainingObjectManager(moduleName);
+					if (targetObjectManager) {
+						return targetObjectManager.requestInstanceOfModule(moduleName, treeIdentifier, _requestId);
+					}
+				}
 				if (!this.trees[treeIdentifier]) {
 					this.addDependencyTree(treeIdentifier);
 				}
@@ -238,6 +245,36 @@ class ObjectManager {
 		return this.moduleResolver.getResolvedModules().moduleMap[moduleName];
 	}
 
+	/**
+	 * Connect another object manager to this instance. Local
+	 * resolvable modules will have precedence before modules
+	 * of additional object managers.
+	 * @param {ObjectManager} objectManager The object manager to connect
+	 */
+	connectObjectManager(objectManager) {
+		if (this.connectedObjectManagers.indexOf(objectManager) &lt; 0) {
+			this.connectedObjectManagers.push(objectManager);
+		}
+	}
+
+	/**
+	 * Get the object manager which can create an instance of the module.
+	 * If no available object manager including this instance can resolve the
+	 * module, nothing is returned.
+	 * @param {string} moduleName
+	 * @return {ObjectManager}
+	 */
+	getContainingObjectManager(moduleName) {
+		if (this.moduleResolver.getResolvedModules().moduleMap[moduleName]) {
+			return this;
+		}
+		for (let i = 0; i &lt; this.connectedObjectManagers.length; i++) {
+			if (this.connectedObjectManagers[i].getContainingObjectManager(moduleName)) {
+				return this.connectedObjectManagers[i];
+			}
+		}
+	}
+
 }
 
 module.exports = ObjectManager;</code></pre>
@@ -250,7 +287,7 @@ module.exports = ObjectManager;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Documentation</h3><ul><li>General</li><li><ul class="child-nav"><li><a href="tutorial-options.html">Options</a></li><li><a href="tutorial-injection.html">Injection</a></li><li><a href="tutorial-instantiator.html">Instantiator</a></li><li><a href="tutorial-module_structure.html">Module Structure</a></li></ul></li><li>Deep Dive</li><li><ul class="child-nav"><li><a href="tutorial-cache.html">Caching</a></li><li><a href="tutorial-dependency_trees.html">Dependency Trees</a></li><li><a href="tutorial-global_scope.html">Global Scope</a></li><li><a href="tutorial-prototype_inheritance.html">Prototype Inheritance</a></li></ul></li></ul><h3>Classes</h3><ul><li><a href="AbstractInstantiator.html">AbstractInstantiator</a></li><li><a href="ConfigResolver.html">ConfigResolver</a></li><li><a href="DependencyTree.html">DependencyTree</a></li><li><a href="ModuleAnalyzer.html">ModuleAnalyzer</a></li><li><a href="ModuleResolver.html">ModuleResolver</a></li><li><a href="ObjectManager.html">ObjectManager</a></li><li><a href="Prototype.html">Prototype</a></li><li><a href="PrototypeWrapper.html">PrototypeWrapper</a></li><li><a href="Singleton.html">Singleton</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Documentation</h3><ul><li>General</li><li><ul class="child-nav"><li><a href="tutorial-options.html">Options</a></li><li><a href="tutorial-connect.html">Connect</a></li><li><a href="tutorial-injection.html">Injection</a></li><li><a href="tutorial-instantiator.html">Instantiator</a></li><li><a href="tutorial-module_structure.html">Module Structure</a></li></ul></li><li>Deep Dive</li><li><ul class="child-nav"><li><a href="tutorial-cache.html">Caching</a></li><li><a href="tutorial-dependency_trees.html">Dependency Trees</a></li><li><a href="tutorial-global_scope.html">Global Scope</a></li><li><a href="tutorial-prototype_inheritance.html">Prototype Inheritance</a></li></ul></li></ul><h3>Classes</h3><ul><li><a href="AbstractInstantiator.html">AbstractInstantiator</a></li><li><a href="ConfigResolver.html">ConfigResolver</a></li><li><a href="DependencyTree.html">DependencyTree</a></li><li><a href="ModuleAnalyzer.html">ModuleAnalyzer</a></li><li><a href="ModuleResolver.html">ModuleResolver</a></li><li><a href="ObjectManager.html">ObjectManager</a></li><li><a href="Prototype.html">Prototype</a></li><li><a href="PrototypeWrapper.html">PrototypeWrapper</a></li><li><a href="Singleton.html">Singleton</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <br class="clear">
