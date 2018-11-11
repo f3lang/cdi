@@ -29,7 +29,6 @@ class ModuleResolver {
 		this.moduleAnalyzer = moduleAnalyzer;
 		this.nameCollisionMap = [];
 
-		let modulePathList = [];
 		let i = moduleSrc.length;
 		while (i--) {
 			this.addModuleSrcDir(moduleSrc[i]);
