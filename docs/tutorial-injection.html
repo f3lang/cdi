@@ -97,6 +97,7 @@ let myBike = cdi.getInstance('Bike');
 // now you got your bike with injected wheels, which got the size information injected</code></pre><h3>circular dependency</h3><p>circular depencencies will issue a warning in the console and the injected argument will be null.</p>
 <h3>prototype inheritance</h3><p>cdi can work with prototype inheritance and will also resolve dependencies in parent prototypes.
 For more details visit <a href="tutorial-prototype_inheritance.html">Prototype Inheritance</a></p>
+<h3>Find your module</h3><p>The ModuleResolver has a method <strong>getModuleNames(regex)</strong>. With this method you can query all existing modules and their alias with a regular expression to find modules like controller, models etc.</p>
 </article>
 
 </section>
