@@ -93,3 +93,7 @@ circular depencencies will issue a warning in the console and the injected argum
 ### prototype inheritance
 cdi can work with prototype inheritance and will also resolve dependencies in parent prototypes.
 For more details visit {@tutorial prototype_inheritance}
+
+
+### Find your module
+The ModuleResolver has a method **getModuleNames(regex)**. With this method you can query all existing modules and their alias with a regular expression to find modules like controller, models etc.

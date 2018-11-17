@@ -58,6 +58,12 @@ describe("Module Resolver", function () {
 			expect(moduleResolver.getResolvedModules().fileCache['gibberish.md']).not.exist;
 		});
 
+		it("searching for modules by regex", function() {
+			let moduleResolver = new ModuleResolver([simpleClassPath], null, moduleAnalyzerMock);
+			expect(moduleResolver.getModuleNames(/class.*/)).to.eql([]);
+			expect(moduleResolver.getModuleNames(/Class.*/)).to.have.members(["Class6", "Class7", "Class8"]);
+		});
+
 	});
 
 	describe("Caching", function () {

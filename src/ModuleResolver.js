@@ -127,6 +127,15 @@ class ModuleResolver {
 		fs.writeFileSync(this.cacheFile, JSON.stringify(this.cache, null, '\t'));
 	}
 
+	/**
+	 * Retrieves a list of module names which match a regular expression
+	 * @param {RegExp} regex
+	 * @return {Array} An array of matched module names
+	 */
+	getModuleNames(regex) {
+		return Object.keys(this.cache.moduleMap).filter(name => regex.test(name));
+	}
+
 }
 
 module.exports = ModuleResolver;
